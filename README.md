@@ -41,8 +41,8 @@ The agent operates on a directed state graph, processing user queries through th
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
-   cd country-agent
+    git clone https://github.com/lakshmi-prabha-s/country-info-agent.git
+    cd country-info-agent
    ```
 
 2. **Create and activate a virtual environment (recommended):**
