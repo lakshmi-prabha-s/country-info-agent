@@ -1,0 +1,45 @@
+@startuml
+!theme plain
+skinparam ActivityBackgroundColor #f4f6f8
+skinparam ActivityBorderColor #2c3e50
+skinparam ArrowColor #2c3e50
+skinparam NoteBackgroundColor #e8f4f8
+skinparam NoteBorderColor #3498db
+skinparam defaultFontName Helvetica
+
+title Country Q&A Agent - LangGraph Architecture
+
+start
+:User Query\n(e.g., "Population of Brazil?");
+
+partition "LangGraph State Graph" {
+
+    :**extract_intent** (Node 1);
+    note right
+      **LLM Structured Output**
+      - Extracts 'country' & 'requested_fields'
+      - Validates if query is in-domain
+    end note
+
+    if (Is query valid?) then (Yes)
+        :**fetch_data** (Node 2);
+        note right
+          **REST API Tool**
+          - Calls restcountries.com endpoint
+          - Gracefully handles 404s & timeouts
+        end note
+    else (No / Out of Domain)
+        :Bypass API Tool\n(Route directly to synthesis);
+    endif
+
+    :**synthesize_answer** (Node 3);
+    note right
+      **LLM Generation**
+      - Grounds answer strictly in API JSON
+      - Or formats the graceful error message
+    end note
+}
+
+:Final Natural Language Answer;
+stop
+@enduml
